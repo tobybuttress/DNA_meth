@@ -1,0 +1,7 @@
+### Build the input file from bedGraph files
+
+./metilene_input.pl -in1 SHXF002H_nightfury_sorted_CpG_sort.bedGraph -in2 SHXF018A_nightfury_sorted_CpG_sort.bedGraph
+
+### Run the DMR caller
+
+./metilene_linux64 -a g1 -b g2 metilene_g1_g2.input
