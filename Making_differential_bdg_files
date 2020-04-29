@@ -1,3 +1,3 @@
-### Merge the bedGraph files of interest and print 
+### Merge the bedGraph files of interest and print (w50)
 
-paste FILE1.bedGraph FILE2.bed | awk '{OFS="\t"; print $1,$2,$3,$4-$8}' > FILE1_and_FILE2_CG_w50.bedGraph
+paste FILE1.bedGraph FILE2.bedGraph | awk '{OFS="\t"; print $1,$2,$3,$4-$8}' > FILE1_and_FILE2_CG_w50.bedGraph
