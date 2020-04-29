@@ -1,7 +1,27 @@
-### Build the input file from bedGraph files
+### For DME DMRs
 
-./metilene_input.pl -in1 SHXF002H_nightfury_sorted_CpG_sort.bedGraph -in2 SHXF018A_nightfury_sorted_CpG_sort.bedGraph
+### Filter CG bedGraph files (output from Methyldackel) for 3 or more Cs
 
-### Run the DMR caller
+cat FILE1_nightfury_sorted_CpG.bedGraph | awk '{OFS="\t";  if ($5+$6>2) print $1,$2,$3,$4,$5,$6}' > FILE1_nightfury_sorted_CpG_filt.bedGraph
 
-./metilene_linux64 -a g1 -b g2 metilene_g1_g2.input
+### Sort the bedGraph files using bedtools (run as slurm script)
+
+source bedtools-2.28.0
+
+bedtools sort -i FILE1_nightfury_sorted_CpG_filt.bedGraph > FILE1_nightfury_sorted_CpG_filt_sort.bedGraph
+
+### Convert to bed files
+
+cat FILE1_nightfury_sorted_CpG_filt_sort.bedGraph | awk '{OFS="\t"; print $1,$2,$3,$4}' > FILE1_nightfury_sorted_CpG_filt_sort.bed
+
+### Build the input file from the filtered bedGraph files
+
+source perl-5.22.1
+
+source bedtools-2.28.0
+
+./metilene_input.pl -in1 FILE1_nightfury_sorted_CpG_sort_filt.bed -in2 FILE2_nightfury_sorted_CpG_sort_filt.bed -out metilene_g1_FILE1_g2_FILE2.input
+
+### Run the DMR caller (use -c 2 option: Benjamini-Hochberg (FDR))
+
+./metilene_linux64 -c 2 -a g1 -b g2 -c 2 metilene_g1_FILE1_g2_FILE2.input > metilene_g1_FILE1_g2_FILE2_output.txt
