@@ -1,0 +1,57 @@
+### For DME DMRs using Shengbo Elife criteria and metilene q-val for FDR control
+
+### Filter CG bedGraph files (output from Methyldackel) for 3 or more Cs
+
+cat FILE1_nightfury_sorted_CpG.bedGraph | awk '{OFS="\t";  if ($5+$6>2) print $1,$2,$3,$4,$5,$6}' > FILE1_nightfury_sorted_CpG_filt.bedGraph
+
+### Sort the bedGraph files using bedtools (run as slurm script)
+
+source bedtools-2.28.0
+
+bedtools sort -i FILE1_nightfury_sorted_CpG_filt.bedGraph > FILE1_nightfury_sorted_CpG_filt_sort.bedGraph
+
+### Convert to bed files
+
+cat FILE1_nightfury_sorted_CpG_filt_sort.bedGraph | awk '{OFS="\t"; print $1,$2,$3,$4}' > FILE1_nightfury_sorted_CpG_filt_sort.bed
+
+### Build the input file from the filtered bedGraph files
+
+source perl-5.22.1
+
+source bedtools-2.28.0
+
+./metilene_input.pl -in1 FILE1_nightfury_sorted_CpG_sort_filt.bed -in2 FILE2_nightfury_sorted_CpG_sort_filt.bed -out metilene_g1_FILE1_g2_FILE2.input
+
+### Run the DMR caller (use -c 2 option: Benjamini-Hochberg (FDR)) - run on the cluster!
+
+./metilene_linux64 -c 2 -a g1 -b g2 -c 2 metilene_g1_FILE1_g2_FILE2.input > metilene_g1_FILE1_g2_FILE2_output.txt
+
+### Take output and filter by q-value to create bed file of DMRs
+
+cat metilene_g1_FILE1_g2_FILE2_output.txt | awk '{OFS="\t";  if ($4<0.05) print $1,$2,$3,$5}' > metilene_DMR_FILE1_FILE2_qval_filt.bed
+
+### Filter for meth difference >20
+
+metilene_DMR_FILE1_FILE2_qval_filt.bed | awk '{OFS="\t";  if ($4>20) print $1,$2,$3}' > metilene_DMR_FILE1_FILE2_qval_methdiff_filt.bed
+
+### Sort the bed file
+
+sort -k1,1 -k2,2n metilene_DMR_FILE1_FILE2_qval_methdiff_filt.bed > metilene_DMR_FILE1_FILE2_qval_methdiff_filt_sorted.bed
+
+### Merge the DMRs within 300bp
+
+bedtools merge -d 300 -i metilene_DMR_FILE1_FILE2_qval_methdiff_filt_sorted.bed > metilene_DMR_FILE1_FILE2_qval_methdiff_filt_sorted_merge300.bed
+
+### Calculate sizes of DMRs
+
+cat metilene_DMR_FILE1_FILE2_qval_methdiff_filt_sorted_merge300.bed | awk '{OFS="\t"; print $1,$2,$3,$3-$2}' > metilene_DMR_FILE1_FILE2_qval_methdiff_filt_sorted_merge300_size.bed
+
+### Remove DMRs <100bp
+
+cat metilene_DMR_FILE1_FILE2_qval_methdiff_filt_sorted_merge300_size.bed | awk '{OFS="\t";  if ($4>99) print $1,$2,$3}' > metilene_DMR_FILE1_FILE2_qval_methdiff_filt_sorted_merge300_filt100.bed
+
+
+
+
+
+
