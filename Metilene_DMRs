@@ -50,7 +50,9 @@ cat metilene_DMR_FILE1_FILE2_qval_methdiff_filt_sorted_merge300.bed | awk '{OFS=
 
 cat metilene_DMR_FILE1_FILE2_qval_methdiff_filt_sorted_merge300_size.bed | awk '{OFS="\t";  if ($4>99) print $1,$2,$3}' > metilene_DMR_FILE1_FILE2_qval_methdiff_filt_sorted_merge300_filt100.bed
 
+### Change name to something more sensible and remove intermediate files
 
+### publish
 
 
 
