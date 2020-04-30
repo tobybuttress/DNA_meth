@@ -24,7 +24,7 @@ source bedtools-2.28.0
 
 ### Run the DMR caller (use -c 2 option: Benjamini-Hochberg (FDR)) - run on the cluster!
 
-./metilene_linux64 -c 2 -a g1 -b g2 -c 2 metilene_g1_FILE1_g2_FILE2.input > metilene_g1_FILE1_g2_FILE2_output.txt
+./metilene_linux64 -c 2 -a g1 -b g2 metilene_g1_FILE1_g2_FILE2.input > metilene_g1_FILE1_g2_FILE2_output.txt
 
 ### Take output and filter by q-value to create bed file of DMRs
 
