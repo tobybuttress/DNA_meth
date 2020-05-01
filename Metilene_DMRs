@@ -30,6 +30,10 @@ source bedtools-2.28.0
 
 cat metilene_g1_FILE1_g2_FILE2_output.txt | awk '{OFS="\t";  if ($4<0.05) print $1,$2,$3,$5}' > metilene_DMR_FILE1_FILE2_qval_filt.bed
 
+OR
+
+cat metilene_g1_FILE1_g2_FILE2_output.txt | awk '{OFS="\t";  if ($7<0.05) print $1,$2,$3,$5}' > metilene_DMR_FILE1_FILE2_MWUpval_filt.bed
+
 ### Filter for meth difference >20
 
 metilene_DMR_FILE1_FILE2_qval_filt.bed | awk '{OFS="\t";  if ($4>20) print $1,$2,$3}' > metilene_DMR_FILE1_FILE2_qval_methdiff_filt.bed
