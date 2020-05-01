@@ -1,0 +1,14 @@
+### Run script 11-Ends_analysis_***
+
+N.B. Sorts bedGraph output from methyldackel, makes GFF file, runs ends_analysis.pl and then average_ends_new.pl
+
+### Combine averages to single file on an interactive node
+
+source bssequel-0.0.1
+source xftools-0.0.1
+source perl-5.22.1
+
+ends_avg_mashup.pl *CG.gene5ends.avg > All_CG_Gene_5ends_avg.tab
+
+### Use output for plotting figures in R (need to melt for correct format)
+
