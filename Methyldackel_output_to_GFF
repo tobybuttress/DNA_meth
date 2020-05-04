@@ -1,0 +1,1 @@
+cat FILE.bedGraph | awk '{if (NR!=1) {OFS="\t"; print $1,$2,$3,$4,$5,$6}}' | awk '{OFS="\t"; print $1,".","CG",$2,$3,$4/100,"+",".","c="$5";""t="$6}' > FILE.gff
