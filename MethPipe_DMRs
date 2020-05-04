@@ -1,0 +1,21 @@
+### Make the .meth files from the MethylDackel output
+
+Run script 12
+
+### Filter the .meth files for C coverage of 3 reads
+
+Run script 13
+
+### Make the .design.txt files in vi or notepad
+
+base case
+LIB1_CG_sorted_cov 1 0
+LIB12_CG_sorted_cov 1 1
+
+### Run the DMR caller
+
+Run script 14
+
+### Filter the DMRs (>0.2 methdiff; merge 300bp; larger than 100bp)
+
+Run script 15
