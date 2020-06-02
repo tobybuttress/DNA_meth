@@ -1,0 +1,10 @@
+### Merge two w50 bedGraph files, filter for >0.5 CG (0.4 CHG; 0.1 CHH) meth in either sample; print the meth diff
+
+paste FILE1_CG_w50.bedGraph FILE2_CG_w50.bedGraph | awk '{OFS="\t";  if ($4>50 || $8>50) print $1,$2,$3,($4-$8)/100}' > FILE1_minus_FILE2_CG_w50_filt50.bed
+
+### Use bedtools intersect to get the w50's the either overlap or do not overlap with the feature being tested (can run as a slurm script)
+
+bedtools intersect -a FILE1_minus_FILE2_CG_w50_filt50.bed -b TEST_FILE.bed -wa -f 0.50 > FILE1_minus_FILE2_CG_TEST_FILE_overlaps.bed
+bedtools intersect -a FILE1_minus_FILE2_CG_w50_filt50.bed -b TEST_FILE.bed -v -f 0.50 > FILE1_minus_FILE2_CG_TEST_FILE_nonoverlaps.bed
+
+### Use paste and awk to print outputs to single file
